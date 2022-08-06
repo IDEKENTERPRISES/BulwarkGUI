@@ -2,6 +2,7 @@ if not _G.preventReRunning then
     _G.preventReRunning = true
     _G.duels = false
     _G.teams = false
+    _G.inGame = 0
     
     mainGui = Instance.new("ScreenGui")
     mainFrame = Instance.new("Frame")
@@ -85,15 +86,9 @@ if not _G.preventReRunning then
         else
             goodButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
         end
+        
     end
     goodButton.MouseButton1Click:Connect(goodPressed)
-    
-    local function goodGameAuto()
-        if _G.goodgame then
-            game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("gg", "All")
-        end
-    end
-    game:GetService("ReplicatedStorage").RemoteEvents.ToClient.displayTourneyEnd.OnClientEvent:Connect(goodGameAuto)
     
     local UserInputService = game:GetService("UserInputService")
      
@@ -107,6 +102,62 @@ if not _G.preventReRunning then
     end
     
     UserInputService.InputBegan:Connect(onInputBegan)
+    
+    cleanButton = Instance.new("TextButton")
+    cleanButton.Parent = mainFrame
+    cleanButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
+    cleanButton.BorderColor3 = Color3.fromRGB(64, 66, 41)
+    cleanButton.Font = "Garamond"
+    cleanButton.Size = UDim2.new(0.5,0,0.5,0)
+    cleanButton.Position = UDim2.new(0.5,0,0.5,0)
+    cleanButton.Text = "TP to Clean"
+    cleanButton.TextColor3 = Color3.fromRGB(116, 119, 74)
+    cleanButton.TextScaled = true
+    
+    local function cleanPressed()
+        if _G.inGame == 0 then 
+            _G.duels = false
+            _G.teams = false
+            teamButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
+            for i,v in ipairs(game:GetService("Workspace").gameComponents.TeamFightQueueBoard.SurfaceGui.ScrollingFrame:GetChildren()) do
+                if v.Name == game.Players.LocalPlayer.Name then
+                    fireclickdetector(game:GetService("Workspace").gameComponents.TeamFightQueueBoard.ClickDetector)
+                end
+            end
+            soloButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
+            for i,v in ipairs(game:GetService("Workspace").gameComponents.DuelQueueBoard.SurfaceGui.ScrollingFrame:GetChildren()) do
+                if v.Name == game.Players.LocalPlayer.Name then
+                    fireclickdetector(game:GetService("Workspace").gameComponents.DuelQueueBoard.ClickDetector)
+                end
+            end
+    
+    
+            hum = game.Players.LocalPlayer.Character.HumanoidRootPart
+            hum.CFrame = CFrame.new(-279, -29, -196)
+        end
+    end
+
+    cleanButton.MouseButton1Click:Connect(cleanPressed)
+    
+    local function gameEnded()
+        if _G.goodgame then
+            game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("gg", "All")
+        end
+        _G.inGame = _G.inGame - 1
+        if _G.inGame == 0 then
+            cleanButton.BackgroundColor3 = Color3.fromRGB(23, 22, 20)
+        end
+    end
+    
+    local function gameStarted()
+        _G.inGame = _G.inGame + 1
+        if _G.inGame >= 1 then 
+            cleanButton.BackgroundColor3 = Color3.fromRGB(53, 52, 50)
+        end
+    end
+    
+    game:GetService("ReplicatedStorage").RemoteEvents.ToClient.displayTourneyEnd.OnClientEvent:Connect(gameEnded)
+    game:GetService("ReplicatedStorage").RemoteEvents.ToClient.displayTourneyStart.OnClientEvent:Connect(gameStarted)
     
     while true do
         if _G.duels then
