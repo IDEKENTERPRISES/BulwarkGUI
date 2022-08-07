@@ -193,7 +193,7 @@ if not _G.preventReRunning then
     
     energyButton = Instance.new("TextButton")
     energyButton.Parent = mainFrame
-    energyButton.BackgroundColor3 = Color3.fromRGB(23, 22, 20)
+    energyButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
     energyButton.BorderColor3 = Color3.fromRGB(64, 66, 41)
     energyButton.Font = "Garamond"
     energyButton.Size = UDim2.new(0,150,0,50)
