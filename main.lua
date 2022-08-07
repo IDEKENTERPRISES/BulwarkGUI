@@ -5,6 +5,7 @@ if not _G.preventReRunning then
     _G.inGame = 0
     _G.god = false
     _G.sound = false
+    _G.energy = false
 
     
     _G.currentPlayers = {}
@@ -190,6 +191,29 @@ if not _G.preventReRunning then
     
     godButton.MouseButton1Click:Connect(godPressed)
     
+    energyButton = Instance.new("TextButton")
+    energyButton.Parent = mainFrame
+    energyButton.BackgroundColor3 = Color3.fromRGB(23, 22, 20)
+    energyButton.BorderColor3 = Color3.fromRGB(64, 66, 41)
+    energyButton.Font = "Garamond"
+    energyButton.Size = UDim2.new(0,150,0,50)
+    energyButton.Position = UDim2.new(0,150,0,100)
+    energyButton.Text = "Auto Full Stamina [V]"
+    energyButton.TextColor3 = Color3.fromRGB(116, 119, 74)
+    energyButton.TextScaled = true
+    
+    
+    local function energyPressed()
+        _G.energy = not _G.energy
+        if _G.energy then
+            energyButton.BackgroundColor3 = Color3.fromRGB(23, 52, 20)
+        else
+            energyButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
+        end
+    end
+
+    energyButton.MouseButton1Click:Connect(energyPressed)
+
     staminaButton = Instance.new("TextButton")
     staminaButton.Parent = mainFrame
     staminaButton.BackgroundColor3 = Color3.fromRGB(23, 22, 20)
@@ -312,6 +336,9 @@ if not _G.preventReRunning then
             if input.KeyCode == Enum.KeyCode.H then
                 godPressed()
             end
+            if input.KeyCode == Enum.KeyCode.V then
+                energyPressed()
+            end
     	end
     end
     
@@ -358,6 +385,14 @@ if not _G.preventReRunning then
                 end
             end
         end
+        if _G.energy then            
+            local args = {
+                [1] = game:GetService("Players").LocalPlayer.Character.Humanoid.Stamina,
+                [2] = 100
+                }
+            
+            game:GetService("ReplicatedStorage").RemoteEvents.ToServer.ChangeVal:FireServer(unpack(args))
+        end
         if _G.sound then
             for i,v in ipairs(game.Players.LocalPlayer.Character:GetChildren()) do
                 if v.ClassName == "Tool" then
@@ -368,9 +403,6 @@ if not _G.preventReRunning then
                     game:GetService("ReplicatedStorage").RemoteEvents.ToServer.Sound:FireServer(unpack(args))
                 end
             end
-            
-            
-
         end
         wait(0.5)
     end
