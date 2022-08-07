@@ -4,6 +4,7 @@ if not _G.preventReRunning then
     _G.teams = false
     _G.inGame = 0
     _G.god = false
+
     
     _G.currentPlayers = {}
     
@@ -93,19 +94,6 @@ if not _G.preventReRunning then
     end
     goodButton.MouseButton1Click:Connect(goodPressed)
     
-    local UserInputService = game:GetService("UserInputService")
-     
-    local function onInputBegan(input, gameProcessed)
-    	if input.UserInputType == Enum.UserInputType.Keyboard then
-    	    if input.KeyCode == Enum.KeyCode.P then
-	                theFrame = game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui").ScreenGui.Frame
-	                theFrame.Visible = not theFrame.Visible
-	        end
-    	end
-    end
-    
-    UserInputService.InputBegan:Connect(onInputBegan)
-    
     cleanButton = Instance.new("TextButton")
     cleanButton.Parent = mainFrame
     cleanButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
@@ -165,6 +153,34 @@ if not _G.preventReRunning then
     
     godButton.MouseButton1Click:Connect(godPressed)
     
+    staminaButton = Instance.new("TextButton")
+    staminaButton.Parent = mainFrame
+    staminaButton.BackgroundColor3 = Color3.fromRGB(23, 22, 20)
+    staminaButton.BorderColor3 = Color3.fromRGB(64, 66, 41)
+    staminaButton.Font = "Garamond"
+    staminaButton.Size = UDim2.new(0,150,0,50)
+    staminaButton.Position = UDim2.new(0,300,0,50)
+    staminaButton.Text = "Drain Enemy Stamina [Y]"
+    staminaButton.TextColor3 = Color3.fromRGB(116, 119, 74)
+    staminaButton.TextScaled = true
+    
+    
+    local function staminaPressed()
+        for i,v in pairs(_G.currentPlayers) do
+            if v then 
+                local args = {
+                                [1] = game:GetService("Players")[i].Character.Humanoid.Stamina,
+                                [2] = 0
+                             }
+                            
+                            game:GetService("ReplicatedStorage").RemoteEvents.ToServer.ChangeVal:FireServer(unpack(args))
+            end
+        end
+    end
+    
+    staminaButton.MouseButton1Click:Connect(staminaPressed)
+    
+    
     function gameEnded()
         if _G.goodgame then
             game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("gg", "All")
@@ -217,6 +233,22 @@ if not _G.preventReRunning then
             end
         end
     end
+    
+    local UserInputService = game:GetService("UserInputService")
+     
+    local function onInputBegan(input, gameProcessed)
+    	if input.UserInputType == Enum.UserInputType.Keyboard then
+    	    if input.KeyCode == Enum.KeyCode.P then
+	                theFrame = game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui").ScreenGui.Frame
+	                theFrame.Visible = not theFrame.Visible
+	        end
+	        if input.KeyCode == Enum.KeyCode.Y then
+	            staminaPressed()
+            end
+    	end
+    end
+    
+    UserInputService.InputBegan:Connect(onInputBegan)
     
     game:GetService("ReplicatedStorage").RemoteEvents.ToClient.displayTourneyEnd.OnClientEvent:Connect(gameEnded)
     game:GetService("ReplicatedStorage").RemoteEvents.ToClient.displayTourneyStart.OnClientEvent:Connect(gameStarted)
