@@ -4,6 +4,7 @@ if not _G.preventReRunning then
     _G.teams = false
     _G.inGame = 0
     _G.god = false
+    _G.sound = false
 
     
     _G.currentPlayers = {}
@@ -16,7 +17,7 @@ if not _G.preventReRunning then
     
     mainFrame.Parent = mainGui    
     mainFrame.Size = UDim2.new(0,450,0,150)
-    mainFrame.Position = UDim2.new(0,10,1,-100)
+    mainFrame.Position = UDim2.new(0,10,1,-150)
     mainFrame.BackgroundColor3 = Color3.fromRGB(23, 22, 20)
     mainFrame.BorderColor3 = Color3.fromRGB(64, 66, 41)
     
@@ -78,7 +79,7 @@ if not _G.preventReRunning then
     goodButton.BorderColor3 = Color3.fromRGB(64, 66, 41)
     goodButton.Font = "Garamond"
     goodButton.Size = UDim2.new(0,150,0,50)
-    goodButton.Position = UDim2.new(0,150,0,0)
+    goodButton.Position = UDim2.new(0,0,0,100)
     goodButton.Text = "Automatic GG"
     goodButton.TextColor3 = Color3.fromRGB(116, 119, 74)
     goodButton.TextScaled = true
@@ -96,7 +97,7 @@ if not _G.preventReRunning then
     
     cleanButton = Instance.new("TextButton")
     cleanButton.Parent = mainFrame
-    cleanButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
+    cleanButton.BackgroundColor3 = Color3.fromRGB(23, 22, 20)
     cleanButton.BorderColor3 = Color3.fromRGB(64, 66, 41)
     cleanButton.Font = "Garamond"
     cleanButton.Size = UDim2.new(0,150,0,50)
@@ -130,6 +131,42 @@ if not _G.preventReRunning then
 
     cleanButton.MouseButton1Click:Connect(cleanPressed)
     
+    armoryButton = Instance.new("TextButton")
+    armoryButton.Parent = mainFrame
+    armoryButton.BackgroundColor3 = Color3.fromRGB(23, 22, 20)
+    armoryButton.BorderColor3 = Color3.fromRGB(64, 66, 41)
+    armoryButton.Font = "Garamond"
+    armoryButton.Size = UDim2.new(0,150,0,50)
+    armoryButton.Position = UDim2.new(0,150,0,0)
+    armoryButton.Text = "TP to Armory"
+    armoryButton.TextColor3 = Color3.fromRGB(116, 119, 74)
+    armoryButton.TextScaled = true
+    
+    local function armoryPressed()
+        if _G.inGame == 0 then 
+            _G.duels = false
+            _G.teams = false
+            teamButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
+            for i,v in ipairs(game:GetService("Workspace").gameComponents.TeamFightQueueBoard.SurfaceGui.ScrollingFrame:GetChildren()) do
+                if v.Name == game.Players.LocalPlayer.Name then
+                    fireclickdetector(game:GetService("Workspace").gameComponents.TeamFightQueueBoard.ClickDetector)
+                end
+            end
+            soloButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
+            for i,v in ipairs(game:GetService("Workspace").gameComponents.DuelQueueBoard.SurfaceGui.ScrollingFrame:GetChildren()) do
+                if v.Name == game.Players.LocalPlayer.Name then
+                    fireclickdetector(game:GetService("Workspace").gameComponents.DuelQueueBoard.ClickDetector)
+                end
+            end
+    
+    
+            hum = game.Players.LocalPlayer.Character.HumanoidRootPart
+            hum.CFrame = CFrame.new(-18.5, 16, -65.5)
+        end
+    end
+
+    armoryButton.MouseButton1Click:Connect(armoryPressed)
+    
     godButton = Instance.new("TextButton")
     godButton.Parent = mainFrame
     godButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
@@ -137,7 +174,7 @@ if not _G.preventReRunning then
     godButton.Font = "Garamond"
     godButton.Size = UDim2.new(0,150,0,50)
     godButton.Position = UDim2.new(0,300,0,0)
-    godButton.Text = "Disable Opponent"
+    godButton.Text = "Disable Opponent [H]"
     godButton.TextColor3 = Color3.fromRGB(116, 119, 74)
     godButton.TextScaled = true
     
@@ -180,6 +217,28 @@ if not _G.preventReRunning then
     
     staminaButton.MouseButton1Click:Connect(staminaPressed)
     
+    soundButton = Instance.new("TextButton")
+    soundButton.Parent = mainFrame
+    soundButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
+    soundButton.BorderColor3 = Color3.fromRGB(64, 66, 41)
+    soundButton.Font = "Garamond"
+    soundButton.Size = UDim2.new(0,150,0,50)
+    soundButton.Position = UDim2.new(0,300,0,100)
+    soundButton.Text = "Spam Noises Globally [T]"
+    soundButton.TextColor3 = Color3.fromRGB(116, 119, 74)
+    soundButton.TextScaled = true
+    
+    
+    local function soundPressed()
+        _G.sound = not _G.sound
+        if _G.sound then
+            soundButton.BackgroundColor3 = Color3.fromRGB(23, 52, 20)
+        else
+            soundButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
+        end
+    end
+    
+    soundButton.MouseButton1Click:Connect(soundPressed)
     
     function gameEnded()
         if _G.goodgame then
@@ -188,6 +247,7 @@ if not _G.preventReRunning then
         _G.inGame = _G.inGame - 1
         if _G.inGame == 0 then
             cleanButton.BackgroundColor3 = Color3.fromRGB(23, 22, 20)
+            armoryButton.BackgroundColor3 = Color3.fromRGB(23, 22, 20)
         end
         
         countEnabled = 0
@@ -216,6 +276,7 @@ if not _G.preventReRunning then
         _G.inGame = _G.inGame + 1
         if _G.inGame >= 1 then 
             cleanButton.BackgroundColor3 = Color3.fromRGB(53, 52, 50)
+            armoryButton.BackgroundColor3 = Color3.fromRGB(53, 52, 50)
         end
         
         for i,v in pairs(first["Players"]) do
@@ -244,6 +305,12 @@ if not _G.preventReRunning then
 	        end
 	        if input.KeyCode == Enum.KeyCode.Y then
 	            staminaPressed()
+	        end
+            if input.KeyCode == Enum.KeyCode.T then
+                soundPressed()
+            end
+            if input.KeyCode == Enum.KeyCode.H then
+                godPressed()
             end
     	end
     end
@@ -291,7 +358,20 @@ if not _G.preventReRunning then
                 end
             end
         end
+        if _G.sound then
+            for i,v in ipairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                if v.ClassName == "Tool" then
+                    weapon = v
+                    local args = {
+                        [1] = weapon.BodyAttach.Marked
+                    }
+                    game:GetService("ReplicatedStorage").RemoteEvents.ToServer.Sound:FireServer(unpack(args))
+                end
+            end
+            
+            
 
+        end
         wait(0.5)
     end
 end
