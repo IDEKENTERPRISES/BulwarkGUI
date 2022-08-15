@@ -168,28 +168,28 @@ if not _G.preventReRunning then
 
     armoryButton.MouseButton1Click:Connect(armoryPressed)
     
-    godButton = Instance.new("TextButton")
-    godButton.Parent = mainFrame
-    godButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
-    godButton.BorderColor3 = Color3.fromRGB(64, 66, 41)
-    godButton.Font = "Garamond"
-    godButton.Size = UDim2.new(0,150,0,50)
-    godButton.Position = UDim2.new(0,300,0,0)
-    godButton.Text = "Disable Opponent [H]"
-    godButton.TextColor3 = Color3.fromRGB(116, 119, 74)
-    godButton.TextScaled = true
+    -- godButton = Instance.new("TextButton")
+    -- godButton.Parent = mainFrame
+    -- godButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
+    -- godButton.BorderColor3 = Color3.fromRGB(64, 66, 41)
+    -- godButton.Font = "Garamond"
+    -- godButton.Size = UDim2.new(0,150,0,50)
+    -- godButton.Position = UDim2.new(0,300,0,0)
+    -- godButton.Text = "Disable Opponent [H]"
+    -- godButton.TextColor3 = Color3.fromRGB(116, 119, 74)
+    -- godButton.TextScaled = true
     
     
-    local function godPressed()
-        _G.god = not _G.god
-        if _G.god then
-            godButton.BackgroundColor3 = Color3.fromRGB(23, 52, 20)
-        else
-            godButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
-        end
-    end
+    -- local function godPressed()
+    --     _G.god = not _G.god
+    --     if _G.god then
+    --         godButton.BackgroundColor3 = Color3.fromRGB(23, 52, 20)
+    --     else
+    --         godButton.BackgroundColor3 = Color3.fromRGB(53, 22, 20)
+    --     end
+    -- end
     
-    godButton.MouseButton1Click:Connect(godPressed)
+    -- godButton.MouseButton1Click:Connect(godPressed)
     
     energyButton = Instance.new("TextButton")
     energyButton.Parent = mainFrame
@@ -214,32 +214,32 @@ if not _G.preventReRunning then
 
     energyButton.MouseButton1Click:Connect(energyPressed)
 
-    staminaButton = Instance.new("TextButton")
-    staminaButton.Parent = mainFrame
-    staminaButton.BackgroundColor3 = Color3.fromRGB(23, 22, 20)
-    staminaButton.BorderColor3 = Color3.fromRGB(64, 66, 41)
-    staminaButton.Font = "Garamond"
-    staminaButton.Size = UDim2.new(0,150,0,50)
-    staminaButton.Position = UDim2.new(0,300,0,50)
-    staminaButton.Text = "Drain Enemy Stamina [Y]"
-    staminaButton.TextColor3 = Color3.fromRGB(116, 119, 74)
-    staminaButton.TextScaled = true
+    -- staminaButton = Instance.new("TextButton")
+    -- staminaButton.Parent = mainFrame
+    -- staminaButton.BackgroundColor3 = Color3.fromRGB(23, 22, 20)
+    -- staminaButton.BorderColor3 = Color3.fromRGB(64, 66, 41)
+    -- staminaButton.Font = "Garamond"
+    -- staminaButton.Size = UDim2.new(0,150,0,50)
+    -- staminaButton.Position = UDim2.new(0,300,0,50)
+    -- staminaButton.Text = "Drain Enemy Stamina [Y]"
+    -- staminaButton.TextColor3 = Color3.fromRGB(116, 119, 74)
+    -- staminaButton.TextScaled = true
     
     
-    local function staminaPressed()
-        for i,v in pairs(_G.currentPlayers) do
-            if v then 
-                local args = {
-                                [1] = game:GetService("Players")[i].Character.Humanoid.Stamina,
-                                [2] = 0
-                             }
+    -- local function staminaPressed()
+    --     for i,v in pairs(_G.currentPlayers) do
+    --         if v then 
+    --             local args = {
+    --                             [1] = game:GetService("Players")[i].Character.Humanoid.Stamina,
+    --                             [2] = 0
+    --                          }
                             
-                            game:GetService("ReplicatedStorage").RemoteEvents.ToServer.ChangeVal:FireServer(unpack(args))
-            end
-        end
-    end
+    --                         game:GetService("ReplicatedStorage").RemoteEvents.ToServer.ChangeVal:FireServer(unpack(args))
+    --         end
+    --     end
+    -- end
     
-    staminaButton.MouseButton1Click:Connect(staminaPressed)
+    -- staminaButton.MouseButton1Click:Connect(staminaPressed)
     
     soundButton = Instance.new("TextButton")
     soundButton.Parent = mainFrame
@@ -285,13 +285,11 @@ if not _G.preventReRunning then
             for i,v in pairs(_G.currentPlayers) do
                 if i ~= _G.latestAdded then
                     _G.currentPlayers[i] = false
-                    print("Removed the non current players.")
                 end
             end
         else
             for i,v in pairs(_G.currentPlayers) do
                 _G.currentPlayers[i] = false
-                print("Removed all players.")
             end
         end
     end
@@ -327,15 +325,15 @@ if not _G.preventReRunning then
 	                theFrame = game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui").ScreenGui.Frame
 	                theFrame.Visible = not theFrame.Visible
 	        end
-	        if input.KeyCode == Enum.KeyCode.Y then
-	            staminaPressed()
-	        end
+	        -- if input.KeyCode == Enum.KeyCode.Y then
+	        --     staminaPressed()
+	        -- end
             if input.KeyCode == Enum.KeyCode.T then
                 soundPressed()
             end
-            if input.KeyCode == Enum.KeyCode.H then
-                godPressed()
-            end
+            -- if input.KeyCode == Enum.KeyCode.H then
+            --     godPressed()
+            -- end
             if input.KeyCode == Enum.KeyCode.V then
                 energyPressed()
             end
@@ -370,21 +368,21 @@ if not _G.preventReRunning then
                 fireclickdetector(game:GetService("Workspace").gameComponents.TeamFightQueueBoard.ClickDetector)
             end
         end
-        if _G.god then 
-            for i,v in ipairs(game.Workspace:GetChildren()) do
-                if v.ClassName == "Model" and v:FindFirstChild("Humanoid") and _G.currentPlayers[v.Name] == true then 
-                    weapon = v:FindFirstChildWhichIsA("Tool")
-                    if weapon then
-                        local args = {
-                            [1] = weapon.Stance,
-                            [2] = "UnParry"
-                        }
+        -- if _G.god then 
+        --     for i,v in ipairs(game.Workspace:GetChildren()) do
+        --         if v.ClassName == "Model" and v:FindFirstChild("Humanoid") and _G.currentPlayers[v.Name] == true then 
+        --             weapon = v:FindFirstChildWhichIsA("Tool")
+        --             if weapon then
+        --                 local args = {
+        --                     [1] = weapon.Stance,
+        --                     [2] = "UnParry"
+        --                 }
                         
-                        game:GetService("ReplicatedStorage").RemoteEvents.ToServer.ChangeVal:FireServer(unpack(args))
-                    end
-                end
-            end
-        end
+        --                 game:GetService("ReplicatedStorage").RemoteEvents.ToServer.ChangeVal:FireServer(unpack(args))
+        --             end
+        --         end
+        --     end
+        -- end
         if _G.energy then            
             local args = {
                 [1] = game:GetService("Players").LocalPlayer.Character.Humanoid.Stamina,
